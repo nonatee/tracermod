@@ -9,14 +9,17 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Map;
 
 import static nonate.tracers.TracerCamera.getCameraLookVector;
 import static nonate.tracers.TracerConfig.*;
 
-public class RenderTracer {
-    public static void drawTracers(MatrixStack matrices, VertexConsumerProvider consumers, Vec3d cameraPos, WorldRenderContext context) {
-        if(!runTracerMobs) {
+public class TracerToBlocks {
+    public static void drawBlockTracers(MatrixStack matrices, VertexConsumerProvider consumers, Vec3d cameraPos, WorldRenderContext context) {
+        if(!runTracerBlocks) {
             return;
         }
         MinecraftClient client = MinecraftClient.getInstance();
@@ -28,16 +31,12 @@ public class RenderTracer {
         matrices.push();
         Camera camera = context.camera();
 
-        for (MobEntity mob : client.world.getEntitiesByClass(
-                MobEntity.class,
-                client.player.getBoundingBox().expand(500),
-                e -> tracedMobs.containsKey(e.getType())
-        )) {
-            Vec3d mobPos = mob.getPos().add(0, mob.getHeight() / 2.0, 0); // mob eye center
+        for(Map.Entry<BlockPos, Block> entryBlock : blocksToRender.entrySet()) {
+            Vec3d floatPos = Vec3d.ofCenter(entryBlock.getKey());
             Vec3d cameraLook = getCameraLookVector(camera); // or use camera.getRotation()
             Vec3d from = cameraLook.multiply(0.05); // small offset forward
-            Vec3d to = mobPos;
-            float[] colors = tracedMobs.get(mob.getType());
+            Vec3d to = floatPos;
+            float[] colors = tracedBlocks.get(entryBlock.getValue());
 
 
             MatrixStack.Entry entry = matrices.peek();
