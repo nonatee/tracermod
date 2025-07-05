@@ -1,14 +1,11 @@
 package nonate.tracers;
 
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
-import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
@@ -68,7 +65,7 @@ public class TracerCommand {
                                             return 0;
                                         }
                                         EntityType type = Registries.ENTITY_TYPE.get(id);
-                                        if(!tracedMobs.containsKey(type)) {
+                                        if(tracedMobs.containsKey(type)) {
                                             tracedMobs.remove(type);
                                             ctx.getSource().sendFeedback(Text.literal("Removed tracer for: " + id));
                                         }
@@ -107,7 +104,7 @@ public class TracerCommand {
                                     .then(argument("color", StringArgumentType.string())
                                             .suggests((context, builder) -> {
                                                 return CommandSource.suggestMatching(
-                                                        List.of("red","green","blue","yellow","cyan"),
+                                                        colorMap.keySet(),
                                                         builder
                                                 );
                                             })
