@@ -9,6 +9,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -134,6 +135,11 @@ public class TracerCommandMob {
                                         }
                                         return 1;
                                     }))))
+            .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("clear")
+                    .executes(context -> {
+                        tracedMobs.clear();
+                        return 1;
+                    }))
             .then(LiteralArgumentBuilder.<FabricClientCommandSource>literal("list").executes(context -> {
                 if (tracedMobs.isEmpty()) {
                     context.getSource().sendFeedback(Text.literal("No tracers currently set."));

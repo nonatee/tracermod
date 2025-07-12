@@ -11,8 +11,8 @@ public class TracerConfig {
     // Mutable map to allow adding/removing entries via commands
     public static final Map<EntityType<?>, float[]> tracedMobs = new HashMap<>();
     public static final Map<Block, float[]> tracedBlocks = new HashMap<>();
-    public static boolean runTracerMobs = true;
-    public static boolean runTracerBlocks = true;
+    public static boolean runTracerMobs = false;
+    public static boolean runTracerBlocks = false;
     public static final Map<String,float[]> colorMap = new HashMap<>();
     public static int radius = 10;
     public static Map<BlockPos,Block> blocksToRender = new HashMap<>();
